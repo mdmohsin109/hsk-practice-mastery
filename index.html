@@ -1,0 +1,2323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSK Words Practice Mastery</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 350px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 0;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 30px 25px;
+            text-align: center;
+            color: white;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .sidebar-header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 350px;
+            background: white;
+            min-height: 100vh;
+        }
+
+        .content-header {
+            background: white;
+            padding: 25px 40px;
+            border-bottom: 1px solid #e9ecef;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .content-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin: 0 0 10px 0;
+            font-weight: 600;
+        }
+
+        .content-subtitle {
+            color: #6c757d;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .level-selector {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .level-selector h3 {
+            color: white;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .level-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .level-btn {
+            padding: 10px 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .level-btn:hover,
+        .level-btn.active {
+            background: white;
+            color: #667eea;
+            border-color: white;
+            transform: translateY(-1px);
+        }
+
+        .audio-settings {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .audio-settings h4 {
+            color: white;
+            text-align: center;
+            margin-bottom: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .audio-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .audio-control-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .audio-control-item label {
+            color: white;
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        #voice-selector {
+            padding: 6px 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            width: 100%;
+        }
+
+        #voice-selector option {
+            background: #667eea;
+            color: white;
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #speech-rate {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        #rate-display {
+            color: white;
+            font-size: 0.85rem;
+            min-width: 35px;
+        }
+
+        .practice-modes {
+            padding: 0 25px 25px 25px;
+        }
+
+        .practice-modes h3 {
+            color: white;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .mode-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .mode-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .mode-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .mode-card.active {
+            background: white;
+            border-color: white;
+            color: #667eea;
+        }
+
+        .mode-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 5px;
+        }
+
+        .mode-icon {
+            font-size: 1.2rem;
+            color: white;
+            width: 20px;
+        }
+
+        .mode-card.active .mode-icon {
+            color: #667eea;
+        }
+
+        .mode-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .mode-card.active .mode-title {
+            color: #667eea;
+        }
+
+        .mode-description {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            line-height: 1.4;
+            margin-left: 32px;
+            color: white;
+        }
+
+        .mode-card.active .mode-description {
+            color: #6c757d;
+        }
+
+        .practice-area {
+            padding: 40px;
+            min-height: calc(100vh - 200px);
+            display: none;
+        }
+
+        .practice-area.active {
+            display: block;
+        }
+
+        .progress-bar {
+            background: #f0f0f0;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .flashcard {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .flashcard:hover {
+            transform: scale(1.02);
+        }
+
+        .flashcard.flipped {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .character {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .flashcard.flipped .character {
+            color: white;
+        }
+
+        .pinyin {
+            font-size: 1.8rem;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .flashcard.flipped .pinyin {
+            color: #f0f8ff;
+        }
+
+        .meaning {
+            font-size: 1.3rem;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .flashcard.flipped .meaning {
+            color: white;
+        }
+
+        .example-sentence {
+            font-size: 1rem;
+            font-style: italic;
+            color: #666;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+
+        .flashcard.flipped .example-sentence {
+            color: #f0f8ff;
+            border-top-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .quiz-question {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .question-text {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .question-character {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .option {
+            padding: 15px 20px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            background: #f9f9f9;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f8ff;
+        }
+
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .option.wrong {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .input-area {
+            margin: 20px 0;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            text-align: center;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .input-field.correct {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .input-field.wrong {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .sentence-builder {
+            margin: 20px 0;
+        }
+
+        .word-banks {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            min-height: 80px;
+        }
+
+        .word-chip {
+            padding: 10px 15px;
+            background: #667eea;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .word-chip:hover {
+            background: #5a6fd8;
+            transform: scale(1.05);
+        }
+
+        .word-chip.used {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .sentence-area {
+            min-height: 60px;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .placed-word {
+            padding: 8px 12px;
+            background: #28a745;
+            color: white;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .placed-word:hover {
+            background: #218838;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .stat {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            min-width: 120px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .feedback {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.wrong {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .audio-button {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #667eea;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+            padding: 5px;
+            border-radius: 50%;
+        }
+
+        .audio-button:hover {
+            color: #5a6fd8;
+            background: rgba(102, 126, 234, 0.1);
+            transform: scale(1.1);
+        }
+
+        .audio-button:active {
+            transform: scale(0.95);
+        }
+
+        .audio-button.playing {
+            color: #28a745;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .completion-screen {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .completion-icon {
+            font-size: 4rem;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+
+        .completion-title {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .completion-message {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .accuracy-display {
+            font-size: 1.5rem;
+            color: #667eea;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 300px;
+            }
+
+            .main-content {
+                margin-left: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                max-height: 400px;
+                overflow-y: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .content-header {
+                padding: 20px;
+            }
+
+            .content-title {
+                font-size: 1.5rem;
+            }
+
+            .practice-area {
+                padding: 20px;
+            }
+
+            .character {
+                font-size: 3rem;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 250px;
+                justify-content: center;
+            }
+
+            .level-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1><i class="fas fa-graduation-cap"></i> HSK Practice</h1>
+                <p>Master Chinese vocabulary with interactive learning</p>
+            </div>
+
+            <div class="level-selector">
+                <h3>HSK Level</h3>
+                <div class="level-buttons">
+                    <button class="level-btn active" data-level="hsk1">HSK 1</button>
+                    <button class="level-btn" data-level="hsk2">HSK 2</button>
+                    <button class="level-btn" data-level="hsk3">HSK 3</button>
+                    <button class="level-btn" data-level="hsk4">HSK 4</button>
+                </div>
+
+                <div class="audio-settings">
+                    <h4>Audio Settings</h4>
+                    <div class="audio-controls">
+                        <div class="audio-control-item">
+                            <label>Voice:</label>
+                            <select id="voice-selector">
+                                <option value="">Auto-select best voice</option>
+                            </select>
+                        </div>
+                        <div class="audio-control-item">
+                            <label>Speed:</label>
+                            <div class="speed-control">
+                                <input type="range" id="speech-rate" min="0.3" max="1.0" step="0.1" value="0.6">
+                                <span id="rate-display">0.6x</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="practice-modes">
+                <h3>Practice Modes</h3>
+                <div class="mode-list">
+                    <div class="mode-card active" data-mode="flashcards">
+                        <div class="mode-header">
+                            <div class="mode-icon"><i class="fas fa-clone"></i></div>
+                            <div class="mode-title">Flashcards</div>
+                        </div>
+                        <div class="mode-description">Review characters, pinyin, and meanings with interactive
+                            flashcards</div>
+                    </div>
+
+                    <div class="mode-card" data-mode="multiple-choice">
+                        <div class="mode-header">
+                            <div class="mode-icon"><i class="fas fa-list-ul"></i></div>
+                            <div class="mode-title">Multiple Choice</div>
+                        </div>
+                        <div class="mode-description">Test your knowledge with meaning recognition questions</div>
+                    </div>
+
+                    <div class="mode-card" data-mode="pinyin-match">
+                        <div class="mode-header">
+                            <div class="mode-icon"><i class="fas fa-link"></i></div>
+                            <div class="mode-title">Pinyin Matching</div>
+                        </div>
+                        <div class="mode-description">Match Chinese characters with their correct pinyin pronunciation
+                        </div>
+                    </div>
+
+                    <div class="mode-card" data-mode="fill-blank">
+                        <div class="mode-header">
+                            <div class="mode-icon"><i class="fas fa-edit"></i></div>
+                            <div class="mode-title">Fill the Blank</div>
+                        </div>
+                        <div class="mode-description">Complete sentences by typing the missing characters</div>
+                    </div>
+
+                    <div class="mode-card" data-mode="sentence-reorder">
+                        <div class="mode-header">
+                            <div class="mode-icon"><i class="fas fa-sort"></i></div>
+                            <div class="mode-title">Sentence Builder</div>
+                        </div>
+                        <div class="mode-description">Arrange words to form correct Chinese sentences</div>
+                    </div>
+
+                    <div class="mode-card" data-mode="typing-practice">
+                        <div class="mode-header">
+                            <div class="mode-icon"><i class="fas fa-keyboard"></i></div>
+                            <div class="mode-title">Typing Practice</div>
+                        </div>
+                        <div class="mode-description">Practice typing characters and pinyin from audio prompts</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="content-header">
+                <h1 class="content-title">Flashcards Practice</h1>
+                <p class="content-subtitle">Review and memorize Chinese characters with their meanings and pronunciation
+                </p>
+            </div>
+
+            <div class="practice-area active" id="flashcards-area">
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-number" id="current-card">1</div>
+                        <div class="stat-label">Current Card</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="total-cards">0</div>
+                        <div class="stat-label">Total Cards</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="known-cards">0</div>
+                        <div class="stat-label">Known</div>
+                    </div>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="flashcard-progress"></div>
+                </div>
+
+                <div class="flashcard" id="flashcard" onclick="flipCard()">
+                    <div class="character" id="fc-character">爱</div>
+                    <div class="pinyin" id="fc-pinyin">ài</div>
+                    <button class="audio-button" onclick="playAudio(event)"><i class="fas fa-volume-up"></i></button>
+                    <div class="meaning" id="fc-meaning" style="display: none;">love; like doing sth.</div>
+                    <div class="example-sentence" id="fc-example" style="display: none;">
+                        <strong>Example:</strong><br>
+                        妈妈，我爱你。<br>
+                        <em>Māma, wǒ ài nǐ.</em><br>
+                        Mom, I love you.
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button class="btn btn-secondary" onclick="previousCard()">
+                        <i class="fas fa-arrow-left"></i> Previous
+                    </button>
+                    <button class="btn btn-primary" onclick="flipCard()">
+                        <i class="fas fa-sync-alt"></i> Flip Card
+                    </button>
+                    <button class="btn btn-success" onclick="markKnown()">
+                        <i class="fas fa-check"></i> I Know This
+                    </button>
+                    <button class="btn btn-primary" onclick="nextCard()">
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="practice-area" id="multiple-choice-area">
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-number" id="mc-current">1</div>
+                        <div class="stat-label">Question</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="mc-total">0</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="mc-correct">0</div>
+                        <div class="stat-label">Correct</div>
+                    </div>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="mc-progress"></div>
+                </div>
+
+                <div class="quiz-question">
+                    <div class="question-text">What does this character mean?</div>
+                    <div class="question-character" id="mc-character">爱</div>
+                    <button class="audio-button" onclick="playAudio(event)"><i class="fas fa-volume-up"></i></button>
+                </div>
+
+                <div class="options" id="mc-options">
+                    <!-- Options will be populated by JavaScript -->
+                </div>
+
+                <div class="feedback" id="mc-feedback" style="display: none;"></div>
+
+                <div class="controls">
+                    <button class="btn btn-primary" id="mc-next" onclick="nextMultipleChoice()" style="display: none;">
+                        Next Question <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="practice-area" id="pinyin-match-area">
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-number" id="pm-current">1</div>
+                        <div class="stat-label">Question</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="pm-total">0</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="pm-correct">0</div>
+                        <div class="stat-label">Correct</div>
+                    </div>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="pm-progress"></div>
+                </div>
+
+                <div class="quiz-question">
+                    <div class="question-text">Select the correct pinyin for:</div>
+                    <div class="question-character" id="pm-character">爱</div>
+                    <button class="audio-button" onclick="playAudio(event)"><i class="fas fa-volume-up"></i></button>
+                </div>
+
+                <div class="options" id="pm-options">
+                    <!-- Options will be populated by JavaScript -->
+                </div>
+
+                <div class="feedback" id="pm-feedback" style="display: none;"></div>
+
+                <div class="controls">
+                    <button class="btn btn-primary" id="pm-next" onclick="nextPinyinMatch()" style="display: none;">
+                        Next Question <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="practice-area" id="fill-blank-area">
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-number" id="fb-current">1</div>
+                        <div class="stat-label">Question</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="fb-total">0</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="fb-correct">0</div>
+                        <div class="stat-label">Correct</div>
+                    </div>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="fb-progress"></div>
+                </div>
+
+                <div class="quiz-question">
+                    <div class="question-text">Fill in the missing character:</div>
+                    <div id="fb-sentence" style="font-size: 1.5rem; margin: 20px 0; color: #333;">
+                        妈妈，我___你。
+                    </div>
+                    <div style="font-style: italic; color: #666; margin-bottom: 20px;">
+                        <em>Māma, wǒ ___ nǐ.</em><br>
+                        Mom, I ___ you.
+                    </div>
+                </div>
+
+                <div class="input-area">
+                    <input type="text" class="input-field" id="fb-input" placeholder="Type the missing character..."
+                        maxlength="5">
+                </div>
+
+                <div class="feedback" id="fb-feedback" style="display: none;"></div>
+
+                <div class="controls">
+                    <button class="btn btn-primary" onclick="checkFillBlank()">
+                        <i class="fas fa-check"></i> Check Answer
+                    </button>
+                    <button class="btn btn-primary" id="fb-next" onclick="nextFillBlank()" style="display: none;">
+                        Next Question <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="practice-area" id="sentence-reorder-area">
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-number" id="sr-current">1</div>
+                        <div class="stat-label">Question</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="sr-total">0</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="sr-correct">0</div>
+                        <div class="stat-label">Correct</div>
+                    </div>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="sr-progress"></div>
+                </div>
+
+                <div class="quiz-question">
+                    <div class="question-text">Arrange the words to form a correct sentence:</div>
+                    <div style="font-style: italic; color: #666; margin: 15px 0;">
+                        English: <span id="sr-english">Mom, I love you.</span>
+                    </div>
+                </div>
+
+                <div class="sentence-builder">
+                    <div class="word-banks" id="sr-word-bank">
+                        <!-- Word chips will be populated by JavaScript -->
+                    </div>
+                    <div class="sentence-area" id="sr-sentence-area">
+                        <span style="color: #999;">Drag words here to build the sentence...</span>
+                    </div>
+                </div>
+
+                <div class="feedback" id="sr-feedback" style="display: none;"></div>
+
+                <div class="controls">
+                    <button class="btn btn-secondary" onclick="clearSentence()">
+                        <i class="fas fa-trash"></i> Clear
+                    </button>
+                    <button class="btn btn-primary" onclick="checkSentenceOrder()">
+                        <i class="fas fa-check"></i> Check Answer
+                    </button>
+                    <button class="btn btn-primary" id="sr-next" onclick="nextSentenceReorder()" style="display: none;">
+                        Next Question <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="practice-area" id="typing-practice-area">
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-number" id="tp-current">1</div>
+                        <div class="stat-label">Question</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="tp-total">0</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="tp-correct">0</div>
+                        <div class="stat-label">Correct</div>
+                    </div>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="tp-progress"></div>
+                </div>
+
+                <div class="quiz-question">
+                    <div class="question-text">Listen and type what you hear:</div>
+                    <div style="margin: 20px 0;">
+                        <button class="btn btn-primary" onclick="playTypingAudio()">
+                            <i class="fas fa-play"></i> Play Audio
+                        </button>
+                    </div>
+                    <div style="font-style: italic; color: #666; margin-bottom: 20px;">
+                        English meaning: <span id="tp-meaning">love; like doing sth.</span>
+                    </div>
+                </div>
+
+                <div class="input-area">
+                    <input type="text" class="input-field" id="tp-input-char" placeholder="Type the character..."
+                        style="margin-bottom: 15px;">
+                    <input type="text" class="input-field" id="tp-input-pinyin" placeholder="Type the pinyin...">
+                </div>
+
+                <div class="feedback" id="tp-feedback" style="display: none;"></div>
+
+                <div class="controls">
+                    <button class="btn btn-primary" onclick="checkTypingPractice()">
+                        <i class="fas fa-check"></i> Check Answer
+                    </button>
+                    <button class="btn btn-primary" id="tp-next" onclick="nextTypingPractice()" style="display: none;">
+                        Next Question <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Global variables
+            let wordsData = {};
+            let currentLevel = 'hsk1';
+            let currentMode = 'flashcards';
+            let currentWords = [];
+            let currentIndex = 0;
+            let gameStats = {
+                correct: 0,
+                total: 0,
+                known: 0
+            };
+            let isCardFlipped = false;
+
+            // Load HSK words data
+            async function loadWordsData() {
+                try {
+                    const response = await fetch('hsk-4-words.json');
+                    wordsData = await response.json();
+                    initializePractice();
+                } catch (error) {
+                    console.error('Error loading words data:', error);
+                    // Fallback with sample data
+                    wordsData = {
+                        words: {
+                            hsk1: [
+                                {
+                                    id: 1,
+                                    character: "爱",
+                                    pinyin: "ài",
+                                    meaning: "love; like doing sth.",
+                                    example_sentence: [
+                                        {
+                                            chinese: "妈妈，我爱你。",
+                                            pinyin: "Māma, wǒ ài nǐ.",
+                                            english: "Mom, I love you."
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    };
+                    initializePractice();
+                }
+            }
+
+            // Initialize practice
+            function initializePractice() {
+                setupEventListeners();
+                updateCurrentWords();
+                resetGameStats();
+                initializeSpeechSynthesis();
+                startFlashcards();
+            }
+
+            // Initialize speech synthesis
+            function initializeSpeechSynthesis() {
+                if ('speechSynthesis' in window) {
+                    // Load voices
+                    speechSynthesis.getVoices();
+
+                    // Force voice loading on some browsers
+                    if (speechSynthesis.onvoiceschanged !== undefined) {
+                        speechSynthesis.onvoiceschanged = function () {
+                            console.log('Speech synthesis voices loaded:', speechSynthesis.getVoices().length);
+                            logAvailableChineseVoices();
+                            populateVoiceSelector();
+                        };
+                    }
+
+                    // Setup audio controls
+                    setupAudioControls();
+
+                    // Try to populate voice selector immediately
+                    setTimeout(() => {
+                        populateVoiceSelector();
+                    }, 1000);
+                }
+            }
+
+            function setupAudioControls() {
+                // Speech rate control
+                const rateSlider = document.getElementById('speech-rate');
+                const rateDisplay = document.getElementById('rate-display');
+
+                if (rateSlider && rateDisplay) {
+                    rateSlider.addEventListener('input', function () {
+                        rateDisplay.textContent = this.value + 'x';
+                    });
+                }
+            }
+
+            function populateVoiceSelector() {
+                const selector = document.getElementById('voice-selector');
+                if (!selector) return;
+
+                const voices = speechSynthesis.getVoices();
+                const chineseVoices = voices.filter(voice =>
+                    voice.lang.includes('zh') ||
+                    voice.lang.includes('cmn') ||
+                    voice.name.toLowerCase().includes('chinese') ||
+                    voice.name.toLowerCase().includes('mandarin')
+                );
+
+                // Clear existing options except the first one
+                while (selector.children.length > 1) {
+                    selector.removeChild(selector.lastChild);
+                }
+
+                // Add Chinese voices
+                chineseVoices.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.value = voice.name;
+                    option.textContent = `${voice.name} (${voice.lang})${voice.localService ? ' - Local' : ''}`;
+                    selector.appendChild(option);
+                });
+
+                if (chineseVoices.length === 0) {
+                    const option = document.createElement('option');
+                    option.value = '';
+                    option.textContent = 'No Chinese voices available';
+                    option.disabled = true;
+                    selector.appendChild(option);
+                }
+            }
+
+            function getSelectedVoice() {
+                const selector = document.getElementById('voice-selector');
+                const selectedVoiceName = selector ? selector.value : '';
+
+                if (selectedVoiceName) {
+                    const voices = speechSynthesis.getVoices();
+                    return voices.find(voice => voice.name === selectedVoiceName);
+                }
+
+                return getBestChineseVoice();
+            }
+
+            function getSpeechRate() {
+                const rateSlider = document.getElementById('speech-rate');
+                return rateSlider ? parseFloat(rateSlider.value) : 0.6;
+            }
+
+            function logAvailableChineseVoices() {
+                const voices = speechSynthesis.getVoices();
+                const chineseVoices = voices.filter(voice =>
+                    voice.lang.includes('zh') ||
+                    voice.lang.includes('cmn') ||
+                    voice.name.toLowerCase().includes('chinese') ||
+                    voice.name.toLowerCase().includes('mandarin')
+                );
+
+                console.log('Available Chinese voices:', chineseVoices.map(v => ({
+                    name: v.name,
+                    lang: v.lang,
+                    localService: v.localService,
+                    default: v.default
+                })));
+            }
+
+            function getBestChineseVoice() {
+                const voices = speechSynthesis.getVoices();
+
+                // Priority order for voice selection (best to worst)
+                const voicePriorities = [
+                    // Native/Local voices first (usually better quality)
+                    voice => voice.localService && voice.lang === 'zh-CN',
+                    voice => voice.localService && voice.lang.includes('zh'),
+
+                    // Specific high-quality voices
+                    voice => voice.name.toLowerCase().includes('xiaoxiao'),
+                    voice => voice.name.toLowerCase().includes('huihui'),
+                    voice => voice.name.toLowerCase().includes('yaoyao'),
+                    voice => voice.name.toLowerCase().includes('kangkang'),
+
+                    // Google voices (usually good quality)
+                    voice => voice.name.toLowerCase().includes('google') && voice.lang === 'zh-CN',
+                    voice => voice.name.toLowerCase().includes('google') && voice.lang.includes('zh'),
+
+                    // Microsoft voices
+                    voice => voice.name.toLowerCase().includes('microsoft') && voice.lang === 'zh-CN',
+
+                    // Any Chinese voice with mainland accent
+                    voice => voice.lang === 'zh-CN',
+                    voice => voice.lang === 'cmn-Hans-CN',
+
+                    // Fallback to any Chinese voice
+                    voice => voice.lang.includes('zh') || voice.name.toLowerCase().includes('chinese'),
+                    voice => voice.name.toLowerCase().includes('mandarin')
+                ];
+
+                for (const priority of voicePriorities) {
+                    const voice = voices.find(priority);
+                    if (voice) {
+                        console.log('Selected voice:', voice.name, voice.lang);
+                        return voice;
+                    }
+                }
+
+                console.log('No Chinese voice found, using default');
+                return null;
+            }
+
+            // Setup event listeners
+            function setupEventListeners() {
+                // Level selector
+                document.querySelectorAll('.level-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        currentLevel = e.target.dataset.level;
+                        updateCurrentWords();
+                        resetGameStats();
+                        startCurrentMode();
+                    });
+                });
+
+                // Mode selector
+                document.querySelectorAll('.mode-card').forEach(card => {
+                    card.addEventListener('click', (e) => {
+                        const clickedCard = e.currentTarget;
+                        document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('active'));
+                        clickedCard.classList.add('active');
+                        currentMode = clickedCard.dataset.mode;
+                        updateContentHeader();
+                        showPracticeArea(currentMode);
+                        resetGameStats();
+                        startCurrentMode();
+                    });
+                });
+
+                // Keyboard shortcuts
+                document.addEventListener('keydown', (e) => {
+                    if (currentMode === 'flashcards') {
+                        if (e.code === 'Space') {
+                            e.preventDefault();
+                            flipCard();
+                        } else if (e.code === 'ArrowLeft') {
+                            e.preventDefault();
+                            previousCard();
+                        } else if (e.code === 'ArrowRight') {
+                            e.preventDefault();
+                            nextCard();
+                        }
+                    }
+                });
+
+                // Input field enter key
+                document.addEventListener('keydown', (e) => {
+                    if (e.code === 'Enter') {
+                        if (currentMode === 'fill-blank' && document.getElementById('fb-input') === document.activeElement) {
+                            checkFillBlank();
+                        } else if (currentMode === 'typing-practice') {
+                            checkTypingPractice();
+                        }
+                    }
+                });
+            }
+
+            // Update current words based on selected level
+            function updateCurrentWords() {
+                currentWords = wordsData.words[currentLevel] || [];
+                currentWords = currentWords.filter(word => word.character && word.pinyin && word.meaning);
+                currentIndex = 0;
+            }
+
+            // Reset game statistics
+            function resetGameStats() {
+                gameStats = { correct: 0, total: 0, known: 0 };
+                currentIndex = 0;
+            }
+
+            // Update content header based on current mode
+            function updateContentHeader() {
+                const titles = {
+                    'flashcards': {
+                        title: 'Flashcards Practice',
+                        subtitle: 'Review and memorize Chinese characters with their meanings and pronunciation'
+                    },
+                    'multiple-choice': {
+                        title: 'Multiple Choice Quiz',
+                        subtitle: 'Test your knowledge by selecting the correct meaning for each character'
+                    },
+                    'pinyin-match': {
+                        title: 'Pinyin Matching',
+                        subtitle: 'Match Chinese characters with their correct pinyin pronunciation'
+                    },
+                    'fill-blank': {
+                        title: 'Fill in the Blanks',
+                        subtitle: 'Complete sentences by typing the missing Chinese characters'
+                    },
+                    'sentence-reorder': {
+                        title: 'Sentence Builder',
+                        subtitle: 'Arrange words in the correct order to form proper Chinese sentences'
+                    },
+                    'typing-practice': {
+                        title: 'Listening & Typing',
+                        subtitle: 'Listen to the pronunciation and type the character and pinyin'
+                    }
+                };
+
+                const modeInfo = titles[currentMode] || titles['flashcards'];
+                document.querySelector('.content-title').textContent = modeInfo.title;
+                document.querySelector('.content-subtitle').textContent = modeInfo.subtitle;
+            }
+
+            // Show specific practice area
+            function showPracticeArea(mode) {
+                document.querySelectorAll('.practice-area').forEach(area => {
+                    area.classList.remove('active');
+                });
+                document.getElementById(mode + '-area').classList.add('active');
+            }
+
+            // Start current mode
+            function startCurrentMode() {
+                if (currentWords.length === 0) {
+                    alert('No words available for this level. Please select a different level.');
+                    return;
+                }
+
+                switch (currentMode) {
+                    case 'flashcards':
+                        startFlashcards();
+                        break;
+                    case 'multiple-choice':
+                        startMultipleChoice();
+                        break;
+                    case 'pinyin-match':
+                        startPinyinMatch();
+                        break;
+                    case 'fill-blank':
+                        startFillBlank();
+                        break;
+                    case 'sentence-reorder':
+                        startSentenceReorder();
+                        break;
+                    case 'typing-practice':
+                        startTypingPractice();
+                        break;
+                }
+            }
+
+            // Flashcards functions
+            function startFlashcards() {
+                showPracticeArea('flashcards');
+                currentIndex = 0;
+                isCardFlipped = false;
+                updateFlashcardStats();
+                displayFlashcard();
+            }
+
+            function displayFlashcard() {
+                if (currentIndex >= currentWords.length) {
+                    showCompletion('flashcards');
+                    return;
+                }
+
+                const word = currentWords[currentIndex];
+                const flashcard = document.getElementById('flashcard');
+
+                flashcard.classList.remove('flipped');
+                isCardFlipped = false;
+
+                document.getElementById('fc-character').textContent = word.character;
+                document.getElementById('fc-pinyin').textContent = word.pinyin;
+                document.getElementById('fc-meaning').textContent = word.meaning;
+
+                // Handle example sentence
+                const exampleElement = document.getElementById('fc-example');
+                if (word.example_sentence && word.example_sentence.length > 0) {
+                    const example = word.example_sentence[0];
+                    exampleElement.innerHTML = `
+                    <strong>Example:</strong><br>
+                    ${example.chinese}<br>
+                    <em>${example.pinyin}</em><br>
+                    ${example.english}
+                `;
+                } else {
+                    exampleElement.innerHTML = '<strong>No example available</strong>';
+                }
+
+                // Hide meaning and example initially
+                document.getElementById('fc-meaning').style.display = 'none';
+                document.getElementById('fc-example').style.display = 'none';
+            }
+
+            function flipCard() {
+                const flashcard = document.getElementById('flashcard');
+                const meaning = document.getElementById('fc-meaning');
+                const example = document.getElementById('fc-example');
+
+                if (!isCardFlipped) {
+                    flashcard.classList.add('flipped');
+                    meaning.style.display = 'block';
+                    example.style.display = 'block';
+                    isCardFlipped = true;
+                } else {
+                    flashcard.classList.remove('flipped');
+                    meaning.style.display = 'none';
+                    example.style.display = 'none';
+                    isCardFlipped = false;
+                }
+            }
+
+            function nextCard() {
+                if (currentIndex < currentWords.length - 1) {
+                    currentIndex++;
+                    updateFlashcardStats();
+                    displayFlashcard();
+                }
+            }
+
+            function previousCard() {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    updateFlashcardStats();
+                    displayFlashcard();
+                }
+            }
+
+            function markKnown() {
+                gameStats.known++;
+                updateFlashcardStats();
+                nextCard();
+            }
+
+            function updateFlashcardStats() {
+                document.getElementById('current-card').textContent = currentIndex + 1;
+                document.getElementById('total-cards').textContent = currentWords.length;
+                document.getElementById('known-cards').textContent = gameStats.known;
+
+                const progress = ((currentIndex + 1) / currentWords.length) * 100;
+                document.getElementById('flashcard-progress').style.width = progress + '%';
+            }
+
+            // Multiple Choice functions
+            function startMultipleChoice() {
+                showPracticeArea('multiple-choice');
+                currentIndex = 0;
+                gameStats = { correct: 0, total: 0 };
+                updateMultipleChoiceStats();
+                displayMultipleChoice();
+            }
+
+            function displayMultipleChoice() {
+                if (currentIndex >= currentWords.length) {
+                    showCompletion('multiple-choice');
+                    return;
+                }
+
+                const word = currentWords[currentIndex];
+                document.getElementById('mc-character').textContent = word.character;
+
+                // Generate options
+                const options = generateMultipleChoiceOptions(word.meaning);
+                const optionsContainer = document.getElementById('mc-options');
+                optionsContainer.innerHTML = '';
+
+                options.forEach((option, index) => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'option';
+                    optionElement.textContent = option;
+                    optionElement.onclick = () => selectMultipleChoiceOption(option, word.meaning, optionElement);
+                    optionsContainer.appendChild(optionElement);
+                });
+
+                // Hide feedback and next button
+                document.getElementById('mc-feedback').style.display = 'none';
+                document.getElementById('mc-next').style.display = 'none';
+            }
+
+            function generateMultipleChoiceOptions(correctAnswer) {
+                const options = [correctAnswer];
+                const otherWords = currentWords.filter(w => w.meaning !== correctAnswer);
+
+                // Add 3 random wrong answers
+                while (options.length < 4 && otherWords.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * otherWords.length);
+                    const wrongAnswer = otherWords[randomIndex].meaning;
+                    if (!options.includes(wrongAnswer)) {
+                        options.push(wrongAnswer);
+                    }
+                    otherWords.splice(randomIndex, 1);
+                }
+
+                // Shuffle options
+                for (let i = options.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [options[i], options[j]] = [options[j], options[i]];
+                }
+
+                return options;
+            }
+
+            function selectMultipleChoiceOption(selected, correct, element) {
+                const isCorrect = selected === correct;
+                gameStats.total++;
+
+                if (isCorrect) {
+                    gameStats.correct++;
+                    element.classList.add('correct');
+                    showFeedback('mc-feedback', 'Correct! Well done!', 'correct');
+                } else {
+                    element.classList.add('wrong');
+                    showFeedback('mc-feedback', `Wrong. The correct answer is: ${correct}`, 'wrong');
+
+                    // Highlight correct answer
+                    document.querySelectorAll('#mc-options .option').forEach(opt => {
+                        if (opt.textContent === correct) {
+                            opt.classList.add('correct');
+                        }
+                    });
+                }
+
+                // Disable all options
+                document.querySelectorAll('#mc-options .option').forEach(opt => {
+                    opt.style.pointerEvents = 'none';
+                });
+
+                updateMultipleChoiceStats();
+                document.getElementById('mc-next').style.display = 'block';
+            }
+
+            function nextMultipleChoice() {
+                currentIndex++;
+                // Re-enable options
+                document.querySelectorAll('#mc-options .option').forEach(opt => {
+                    opt.style.pointerEvents = 'auto';
+                    opt.classList.remove('correct', 'wrong');
+                });
+                displayMultipleChoice();
+            }
+
+            function updateMultipleChoiceStats() {
+                document.getElementById('mc-current').textContent = currentIndex + 1;
+                document.getElementById('mc-total').textContent = currentWords.length;
+                document.getElementById('mc-correct').textContent = gameStats.correct;
+
+                const progress = ((currentIndex + 1) / currentWords.length) * 100;
+                document.getElementById('mc-progress').style.width = progress + '%';
+            }
+
+            // Pinyin Match functions
+            function startPinyinMatch() {
+                showPracticeArea('pinyin-match');
+                currentIndex = 0;
+                gameStats = { correct: 0, total: 0 };
+                updatePinyinMatchStats();
+                displayPinyinMatch();
+            }
+
+            function displayPinyinMatch() {
+                if (currentIndex >= currentWords.length) {
+                    showCompletion('pinyin-match');
+                    return;
+                }
+
+                const word = currentWords[currentIndex];
+                document.getElementById('pm-character').textContent = word.character;
+
+                // Generate pinyin options
+                const options = generatePinyinOptions(word.pinyin);
+                const optionsContainer = document.getElementById('pm-options');
+                optionsContainer.innerHTML = '';
+
+                options.forEach((option, index) => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'option';
+                    optionElement.textContent = option;
+                    optionElement.onclick = () => selectPinyinOption(option, word.pinyin, optionElement);
+                    optionsContainer.appendChild(optionElement);
+                });
+
+                // Hide feedback and next button
+                document.getElementById('pm-feedback').style.display = 'none';
+                document.getElementById('pm-next').style.display = 'none';
+            }
+
+            function generatePinyinOptions(correctPinyin) {
+                const options = [correctPinyin];
+                const otherWords = currentWords.filter(w => w.pinyin !== correctPinyin);
+
+                // Add 3 random wrong answers
+                while (options.length < 4 && otherWords.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * otherWords.length);
+                    const wrongPinyin = otherWords[randomIndex].pinyin;
+                    if (!options.includes(wrongPinyin)) {
+                        options.push(wrongPinyin);
+                    }
+                    otherWords.splice(randomIndex, 1);
+                }
+
+                // Shuffle options
+                for (let i = options.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [options[i], options[j]] = [options[j], options[i]];
+                }
+
+                return options;
+            }
+
+            function selectPinyinOption(selected, correct, element) {
+                const isCorrect = selected === correct;
+                gameStats.total++;
+
+                if (isCorrect) {
+                    gameStats.correct++;
+                    element.classList.add('correct');
+                    showFeedback('pm-feedback', 'Correct! Well done!', 'correct');
+                } else {
+                    element.classList.add('wrong');
+                    showFeedback('pm-feedback', `Wrong. The correct pinyin is: ${correct}`, 'wrong');
+
+                    // Highlight correct answer
+                    document.querySelectorAll('#pm-options .option').forEach(opt => {
+                        if (opt.textContent === correct) {
+                            opt.classList.add('correct');
+                        }
+                    });
+                }
+
+                // Disable all options
+                document.querySelectorAll('#pm-options .option').forEach(opt => {
+                    opt.style.pointerEvents = 'none';
+                });
+
+                updatePinyinMatchStats();
+                document.getElementById('pm-next').style.display = 'block';
+            }
+
+            function nextPinyinMatch() {
+                currentIndex++;
+                // Re-enable options
+                document.querySelectorAll('#pm-options .option').forEach(opt => {
+                    opt.style.pointerEvents = 'auto';
+                    opt.classList.remove('correct', 'wrong');
+                });
+                displayPinyinMatch();
+            }
+
+            function updatePinyinMatchStats() {
+                document.getElementById('pm-current').textContent = currentIndex + 1;
+                document.getElementById('pm-total').textContent = currentWords.length;
+                document.getElementById('pm-correct').textContent = gameStats.correct;
+
+                const progress = ((currentIndex + 1) / currentWords.length) * 100;
+                document.getElementById('pm-progress').style.width = progress + '%';
+            }
+
+            // Fill the Blank functions
+            function startFillBlank() {
+                showPracticeArea('fill-blank');
+                currentIndex = 0;
+                gameStats = { correct: 0, total: 0 };
+                updateFillBlankStats();
+                displayFillBlank();
+            }
+
+            function displayFillBlank() {
+                if (currentIndex >= currentWords.length) {
+                    showCompletion('fill-blank');
+                    return;
+                }
+
+                const word = currentWords[currentIndex];
+
+                // Create sentence with blank
+                if (word.example_sentence && word.example_sentence.length > 0) {
+                    const example = word.example_sentence[0];
+                    const sentenceWithBlank = example.chinese.replace(word.character, '___');
+                    const pinyinWithBlank = example.pinyin.replace(word.pinyin, '___');
+
+                    document.getElementById('fb-sentence').innerHTML = sentenceWithBlank;
+                    document.querySelector('#fill-blank-area .quiz-question div[style*="italic"]').innerHTML = `
+                    <em>${pinyinWithBlank}</em><br>
+                    ${example.english.replace(word.meaning.split(';')[0].trim(), '___')}
+                `;
+                } else {
+                    // Fallback if no example sentence
+                    document.getElementById('fb-sentence').innerHTML = `这个字是___。`;
+                    document.querySelector('#fill-blank-area .quiz-question div[style*="italic"]').innerHTML = `
+                    <em>Zhège zì shì ___.</em><br>
+                    This character is ___.
+                `;
+                }
+
+                // Clear input and feedback
+                const input = document.getElementById('fb-input');
+                input.value = '';
+                input.classList.remove('correct', 'wrong');
+
+                document.getElementById('fb-feedback').style.display = 'none';
+                document.getElementById('fb-next').style.display = 'none';
+            }
+
+            function checkFillBlank() {
+                const word = currentWords[currentIndex];
+                const input = document.getElementById('fb-input');
+                const userAnswer = input.value.trim();
+
+                gameStats.total++;
+
+                if (userAnswer === word.character) {
+                    gameStats.correct++;
+                    input.classList.add('correct');
+                    showFeedback('fb-feedback', 'Correct! Well done!', 'correct');
+                } else {
+                    input.classList.add('wrong');
+                    showFeedback('fb-feedback', `Wrong. The correct answer is: ${word.character}`, 'wrong');
+                }
+
+                updateFillBlankStats();
+                document.getElementById('fb-next').style.display = 'inline-block';
+            }
+
+            function nextFillBlank() {
+                currentIndex++;
+                displayFillBlank();
+            }
+
+            function updateFillBlankStats() {
+                document.getElementById('fb-current').textContent = currentIndex + 1;
+                document.getElementById('fb-total').textContent = currentWords.length;
+                document.getElementById('fb-correct').textContent = gameStats.correct;
+
+                const progress = ((currentIndex + 1) / currentWords.length) * 100;
+                document.getElementById('fb-progress').style.width = progress + '%';
+            }
+
+            // Sentence Reorder functions
+            function startSentenceReorder() {
+                showPracticeArea('sentence-reorder');
+                currentIndex = 0;
+                gameStats = { correct: 0, total: 0 };
+                updateSentenceReorderStats();
+                displaySentenceReorder();
+            }
+
+            function displaySentenceReorder() {
+                if (currentIndex >= currentWords.length) {
+                    showCompletion('sentence-reorder');
+                    return;
+                }
+
+                const word = currentWords[currentIndex];
+
+                if (word.example_sentence && word.example_sentence.length > 0) {
+                    const example = word.example_sentence[0];
+                    document.getElementById('sr-english').textContent = example.english;
+
+                    // Split Chinese sentence into words/characters
+                    const chineseWords = example.chinese.split('').filter(char => char.trim() !== '');
+
+                    // Shuffle the words
+                    const shuffledWords = [...chineseWords].sort(() => Math.random() - 0.5);
+
+                    // Display word bank
+                    const wordBank = document.getElementById('sr-word-bank');
+                    wordBank.innerHTML = '';
+                    shuffledWords.forEach(word => {
+                        const wordChip = document.createElement('div');
+                        wordChip.className = 'word-chip';
+                        wordChip.textContent = word;
+                        wordChip.onclick = () => addWordToSentence(word, wordChip);
+                        wordBank.appendChild(wordChip);
+                    });
+
+                    // Clear sentence area
+                    const sentenceArea = document.getElementById('sr-sentence-area');
+                    sentenceArea.innerHTML = '<span style="color: #999;">Drag words here to build the sentence...</span>';
+
+                    // Store correct answer
+                    sentenceArea.dataset.correctAnswer = example.chinese;
+                } else {
+                    // Skip if no example sentence
+                    nextSentenceReorder();
+                    return;
+                }
+
+                document.getElementById('sr-feedback').style.display = 'none';
+                document.getElementById('sr-next').style.display = 'none';
+            }
+
+            function addWordToSentence(word, chip) {
+                const sentenceArea = document.getElementById('sr-sentence-area');
+
+                // Remove placeholder text if present
+                if (sentenceArea.querySelector('span[style*="color: #999"]')) {
+                    sentenceArea.innerHTML = '';
+                }
+
+                // Add word to sentence
+                const placedWord = document.createElement('div');
+                placedWord.className = 'placed-word';
+                placedWord.textContent = word;
+                placedWord.onclick = () => removeWordFromSentence(placedWord, word);
+                sentenceArea.appendChild(placedWord);
+
+                // Mark chip as used
+                chip.classList.add('used');
+            }
+
+            function removeWordFromSentence(placedWord, word) {
+                // Remove from sentence
+                placedWord.remove();
+
+                // Restore word to bank
+                document.querySelectorAll('#sr-word-bank .word-chip').forEach(chip => {
+                    if (chip.textContent === word && chip.classList.contains('used')) {
+                        chip.classList.remove('used');
+                        return;
+                    }
+                });
+
+                // Add placeholder if sentence is empty
+                const sentenceArea = document.getElementById('sr-sentence-area');
+                if (sentenceArea.children.length === 0) {
+                    sentenceArea.innerHTML = '<span style="color: #999;">Drag words here to build the sentence...</span>';
+                }
+            }
+
+            function clearSentence() {
+                const sentenceArea = document.getElementById('sr-sentence-area');
+                sentenceArea.innerHTML = '<span style="color: #999;">Drag words here to build the sentence...</span>';
+
+                // Restore all words to bank
+                document.querySelectorAll('#sr-word-bank .word-chip').forEach(chip => {
+                    chip.classList.remove('used');
+                });
+            }
+
+            function checkSentenceOrder() {
+                const sentenceArea = document.getElementById('sr-sentence-area');
+                const correctAnswer = sentenceArea.dataset.correctAnswer;
+
+                // Get user's sentence
+                const placedWords = Array.from(sentenceArea.querySelectorAll('.placed-word'));
+                const userSentence = placedWords.map(word => word.textContent).join('');
+
+                gameStats.total++;
+
+                if (userSentence === correctAnswer) {
+                    gameStats.correct++;
+                    showFeedback('sr-feedback', 'Correct! Perfect sentence!', 'correct');
+                } else {
+                    showFeedback('sr-feedback', `Wrong. The correct sentence is: ${correctAnswer}`, 'wrong');
+                }
+
+                updateSentenceReorderStats();
+                document.getElementById('sr-next').style.display = 'inline-block';
+            }
+
+            function nextSentenceReorder() {
+                currentIndex++;
+                displaySentenceReorder();
+            }
+
+            function updateSentenceReorderStats() {
+                document.getElementById('sr-current').textContent = currentIndex + 1;
+                document.getElementById('sr-total').textContent = currentWords.length;
+                document.getElementById('sr-correct').textContent = gameStats.correct;
+
+                const progress = ((currentIndex + 1) / currentWords.length) * 100;
+                document.getElementById('sr-progress').style.width = progress + '%';
+            }
+
+            // Typing Practice functions
+            function startTypingPractice() {
+                showPracticeArea('typing-practice');
+                currentIndex = 0;
+                gameStats = { correct: 0, total: 0 };
+                updateTypingPracticeStats();
+                displayTypingPractice();
+            }
+
+            function displayTypingPractice() {
+                if (currentIndex >= currentWords.length) {
+                    showCompletion('typing-practice');
+                    return;
+                }
+
+                const word = currentWords[currentIndex];
+                document.getElementById('tp-meaning').textContent = word.meaning;
+
+                // Clear inputs and feedback
+                document.getElementById('tp-input-char').value = '';
+                document.getElementById('tp-input-pinyin').value = '';
+                document.getElementById('tp-input-char').classList.remove('correct', 'wrong');
+                document.getElementById('tp-input-pinyin').classList.remove('correct', 'wrong');
+
+                document.getElementById('tp-feedback').style.display = 'none';
+                document.getElementById('tp-next').style.display = 'none';
+            }
+
+            function playTypingAudio() {
+                const word = currentWords[currentIndex];
+                if (!word) return;
+
+                // Check if speech synthesis is supported
+                if ('speechSynthesis' in window) {
+                    // Cancel any ongoing speech
+                    speechSynthesis.cancel();
+
+                    // Wait for voices to load if needed
+                    function speakWord() {
+                        const utterance = new SpeechSynthesisUtterance(word.character);
+
+                        // Use selected or best available Chinese voice
+                        const chineseVoice = getSelectedVoice();
+                        if (chineseVoice) {
+                            utterance.voice = chineseVoice;
+                        }
+
+                        // Optimize for listening practice - slower and very clear
+                        utterance.lang = 'zh-CN';
+                        utterance.rate = Math.max(0.3, getSpeechRate() - 0.2); // Even slower for typing practice
+                        utterance.pitch = 1.0;   // Natural pitch for tone recognition
+                        utterance.volume = 0.9;  // Clear but comfortable volume
+
+                        // Add visual feedback during speech
+                        const playButton = document.querySelector('#typing-practice-area .btn-primary');
+                        const originalText = playButton.innerHTML;
+                        playButton.innerHTML = '<i class="fas fa-volume-up"></i> Playing...';
+                        playButton.disabled = true;
+
+                        utterance.onend = function () {
+                            playButton.innerHTML = originalText;
+                            playButton.disabled = false;
+
+                            // Optional: Repeat the word after a pause for better learning
+                            setTimeout(() => {
+                                if (confirm('Play again? (Click OK to repeat, Cancel to continue)')) {
+                                    playTypingAudio();
+                                }
+                            }, 800);
+                        };
+
+                        utterance.onerror = function (e) {
+                            console.warn('Speech synthesis error:', e);
+                            playButton.innerHTML = originalText;
+                            playButton.disabled = false;
+
+                            // Show fallback with detailed pronunciation guide
+                            alert(`Listen: ${word.pinyin} (${word.character})\n\nPronunciation guide:\n${getPronunciationGuide(word.pinyin)}`);
+                        };
+
+                        speechSynthesis.speak(utterance);
+                    }
+
+                    // Check if voices are loaded
+                    if (speechSynthesis.getVoices().length > 0) {
+                        speakWord();
+                    } else {
+                        // Wait for voices to load
+                        speechSynthesis.onvoiceschanged = function () {
+                            speakWord();
+                        };
+                    }
+                } else {
+                    // Enhanced fallback with pronunciation guide
+                    alert(`Listen: ${word.pinyin} (${word.character})\n\nPronunciation guide:\n${getPronunciationGuide(word.pinyin)}\n\nAudio not supported in this browser.`);
+                }
+            }
+
+            function getPronunciationGuide(pinyin) {
+                // Simple tone guide for common pinyin patterns
+                const toneGuides = {
+                    'ā': 'high level tone (1st tone)',
+                    'á': 'rising tone (2nd tone)',
+                    'ǎ': 'falling-rising tone (3rd tone)',
+                    'à': 'falling tone (4th tone)',
+                    'ē': 'high level tone (1st tone)',
+                    'é': 'rising tone (2nd tone)',
+                    'ě': 'falling-rising tone (3rd tone)',
+                    'è': 'falling tone (4th tone)',
+                    'ī': 'high level tone (1st tone)',
+                    'í': 'rising tone (2nd tone)',
+                    'ǐ': 'falling-rising tone (3rd tone)',
+                    'ì': 'falling tone (4th tone)',
+                    'ō': 'high level tone (1st tone)',
+                    'ó': 'rising tone (2nd tone)',
+                    'ǒ': 'falling-rising tone (3rd tone)',
+                    'ò': 'falling tone (4th tone)',
+                    'ū': 'high level tone (1st tone)',
+                    'ú': 'rising tone (2nd tone)',
+                    'ǔ': 'falling-rising tone (3rd tone)',
+                    'ù': 'falling tone (4th tone)',
+                    'ü': 'high level tone (1st tone)',
+                    'ǘ': 'rising tone (2nd tone)',
+                    'ǚ': 'falling-rising tone (3rd tone)',
+                    'ǜ': 'falling tone (4th tone)'
+                };
+
+                let guide = pinyin;
+                for (const [char, description] of Object.entries(toneGuides)) {
+                    if (pinyin.includes(char)) {
+                        guide += ` - contains ${description}`;
+                        break;
+                    }
+                }
+
+                return guide;
+            }
+
+            function checkTypingPractice() {
+                const word = currentWords[currentIndex];
+                const charInput = document.getElementById('tp-input-char');
+                const pinyinInput = document.getElementById('tp-input-pinyin');
+
+                const userChar = charInput.value.trim();
+                const userPinyin = pinyinInput.value.trim().toLowerCase();
+
+                gameStats.total++;
+
+                let isCharCorrect = userChar === word.character;
+                let isPinyinCorrect = userPinyin === word.pinyin.toLowerCase();
+
+                if (isCharCorrect) {
+                    charInput.classList.add('correct');
+                } else {
+                    charInput.classList.add('wrong');
+                }
+
+                if (isPinyinCorrect) {
+                    pinyinInput.classList.add('correct');
+                } else {
+                    pinyinInput.classList.add('wrong');
+                }
+
+                if (isCharCorrect && isPinyinCorrect) {
+                    gameStats.correct++;
+                    showFeedback('tp-feedback', 'Perfect! Both character and pinyin are correct!', 'correct');
+                } else {
+                    let message = 'Incorrect. ';
+                    if (!isCharCorrect) message += `Character should be: ${word.character}. `;
+                    if (!isPinyinCorrect) message += `Pinyin should be: ${word.pinyin}.`;
+                    showFeedback('tp-feedback', message, 'wrong');
+                }
+
+                updateTypingPracticeStats();
+                document.getElementById('tp-next').style.display = 'inline-block';
+            }
+
+            function nextTypingPractice() {
+                currentIndex++;
+                displayTypingPractice();
+            }
+
+            function updateTypingPracticeStats() {
+                document.getElementById('tp-current').textContent = currentIndex + 1;
+                document.getElementById('tp-total').textContent = currentWords.length;
+                document.getElementById('tp-correct').textContent = gameStats.correct;
+
+                const progress = ((currentIndex + 1) / currentWords.length) * 100;
+                document.getElementById('tp-progress').style.width = progress + '%';
+            }
+
+            // Utility functions
+            function showFeedback(elementId, message, type) {
+                const feedback = document.getElementById(elementId);
+                feedback.textContent = message;
+                feedback.className = `feedback ${type}`;
+                feedback.style.display = 'block';
+            }
+
+            function playAudio(event) {
+                event.stopPropagation();
+
+                const word = currentWords[currentIndex];
+                if (!word) return;
+
+                const audioButton = event.target.closest('.audio-button');
+
+                // Check if speech synthesis is supported
+                if ('speechSynthesis' in window) {
+                    // Cancel any ongoing speech
+                    speechSynthesis.cancel();
+
+                    // Add visual feedback
+                    if (audioButton) {
+                        audioButton.classList.add('playing');
+                    }
+
+                    // Wait for voices to load if needed
+                    function speakWord() {
+                        const utterance = new SpeechSynthesisUtterance(word.character);
+
+                        // Use selected or best available Chinese voice
+                        const chineseVoice = getSelectedVoice();
+                        if (chineseVoice) {
+                            utterance.voice = chineseVoice;
+                        }
+
+                        // Use user-selected speech rate and optimize other settings
+                        utterance.lang = 'zh-CN';
+                        utterance.rate = getSpeechRate();
+                        utterance.pitch = 1.0;   // Natural pitch for proper tones
+                        utterance.volume = 0.9;  // Comfortable volume
+
+                        // For single characters, emphasize even more
+                        if (word.character.length === 1) {
+                            utterance.rate = Math.max(0.4, getSpeechRate() - 0.1);
+                        }
+
+                        // Remove visual feedback when done
+                        utterance.onend = function () {
+                            if (audioButton) {
+                                audioButton.classList.remove('playing');
+                            }
+                        };
+
+                        // Add error handling
+                        utterance.onerror = function (e) {
+                            console.warn('Speech synthesis error:', e);
+                            if (audioButton) {
+                                audioButton.classList.remove('playing');
+                            }
+                            showFallbackAudio(word, audioButton);
+                        };
+
+                        speechSynthesis.speak(utterance);
+                    }
+
+                    // Check if voices are loaded
+                    if (speechSynthesis.getVoices().length > 0) {
+                        speakWord();
+                    } else {
+                        // Wait for voices to load
+                        speechSynthesis.onvoiceschanged = function () {
+                            speakWord();
+                        };
+                    }
+                } else {
+                    showFallbackAudio(word, audioButton);
+                }
+            }
+
+            function showFallbackAudio(word, audioButton) {
+                // Create a visual feedback when audio isn't available
+                if (audioButton) {
+                    const originalHTML = audioButton.innerHTML;
+                    audioButton.innerHTML = '<i class="fas fa-check"></i>';
+                    audioButton.style.color = '#28a745';
+                    audioButton.classList.remove('playing');
+
+                    setTimeout(() => {
+                        audioButton.innerHTML = originalHTML;
+                        audioButton.style.color = '';
+                    }, 1500);
+                }
+
+                // Show pinyin as fallback
+                const toast = document.createElement('div');
+                toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #333;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 5px;
+                z-index: 1000;
+                font-size: 1.2rem;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            `;
+                toast.textContent = `🔊 ${word.pinyin}`;
+                document.body.appendChild(toast);
+
+                setTimeout(() => {
+                    if (document.body.contains(toast)) {
+                        document.body.removeChild(toast);
+                    }
+                }, 2000);
+            }
+
+            function showCompletion(mode) {
+                const practiceArea = document.getElementById(mode + '-area');
+                const accuracy = gameStats.total > 0 ? Math.round((gameStats.correct / gameStats.total) * 100) : 0;
+
+                practiceArea.innerHTML = `
+                <div class="completion-screen">
+                    <div class="completion-icon"><i class="fas fa-trophy"></i></div>
+                    <div class="completion-title">Congratulations!</div>
+                    <div class="completion-message">You've completed all questions in this practice mode.</div>
+                    <div class="accuracy-display">
+                        Accuracy: ${accuracy}%<br>
+                        ${gameStats.correct} correct out of ${gameStats.total} questions
+                    </div>
+                    <div class="controls">
+                        <button class="btn btn-primary" onclick="startCurrentMode()">
+                            <i class="fas fa-redo"></i> Practice Again
+                        </button>
+                        <button class="btn btn-secondary" onclick="location.reload()">
+                            <i class="fas fa-home"></i> Back to Menu
+                        </button>
+                    </div>
+                </div>
+            `;
+            }
+
+            // Initialize the application
+            document.addEventListener('DOMContentLoaded', loadWordsData);
+        </script>
+    </div>
+    </div>
+</body>
+
+</html>
